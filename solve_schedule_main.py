@@ -2,11 +2,10 @@
 Main function to run the schedule solver with genetic algorithms
 
 TODO(zhach):
-1) Create task proto
-2) change parse_input to output a list of protos
-3) Implement main genetic algorithm code
-4) Output tasks and time units that are left
-5) suck butts
+1) change parse_input to output a list of protos
+2) Implement main genetic algorithm code
+3) Output tasks and time units that are left
+4) suck butts
 """
 
 from absl import app

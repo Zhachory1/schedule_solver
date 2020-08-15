@@ -3,14 +3,13 @@
 Simple schedule creator with a genetic algorithm
 
 TODO(zhach):
-1) Make task proto (probably easier to manage cause it's a fixed data structure)
-2) Make random valid genes
-3) Implement crossover
-4) Implement conception
-5) Implement fitness score
-6) Implement selection
-7) Implement stopping criteria
-8) Tests
+1) Make random valid genes
+2) Implement crossover
+3) Implement conception
+4) Implement fitness score
+5) Implement selection
+6) Implement stopping criteria
+7) Tests
 """
 
 from collections import Counter
