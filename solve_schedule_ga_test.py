@@ -128,6 +128,5 @@ class TestMakeRandomGenes(unittest.TestCase):
         self.assertTrue(is_schedule_possible(schedule, tasks))
 
 
-
 if __name__ == '__main__':
     unittest.main()

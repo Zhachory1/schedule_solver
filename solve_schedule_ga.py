@@ -15,7 +15,6 @@ TODO(zhach):
 
 from collections import Counter
 import numpy as np
-import functools
 
 
 def is_schedule_possible(schedule, tasks):
@@ -116,7 +115,8 @@ def make_random_genes(tasks, schedule_size):
         if np.random.random() < 0.2 or time_units_left == {}:
             rand_schedule.append(-1)
         else:
-            random_task = int(np.floor(np.random.random() * len(time_units_left)))
+            random_task = \
+                int(np.floor(np.random.random() * len(time_units_left)))
             rand_schedule.append(random_task)
             time_units_left[random_task] -= 1
             if time_units_left[random_task] == 0:

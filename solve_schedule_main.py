@@ -40,7 +40,7 @@ def main(argv):
         raise app.UsageError('Too many command-line arguments.')
 
     # Parse the tasks into a hash
-    tasks = parse_input(FLAGS.input)
+    _ = parse_input(FLAGS.input)
 
     print("I'm working")
     return 0
