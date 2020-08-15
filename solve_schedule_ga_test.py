@@ -47,7 +47,7 @@ class TestIsValidSchedule(unittest.TestCase):
 
     def test_2_tasks_overbooked(self):
         self.assertFalse(is_schedule_possible(
-            [2, 2, 1, 1, 1, 1, 0], self._tasks))
+            [2, 2, 1, 1, 1, 1, -1], self._tasks))
 
     def test_with_invalid_task(self):
         self.assertFalse(is_schedule_possible(
@@ -114,10 +114,19 @@ class TestMakeRandomGenes(unittest.TestCase):
         ]
 
     def test_random_genes(self):
-        # Make random tasks with random time and priority
-        # Will assert that the given schedule will still be
-        # a valid schedule
-        pass
+        schedule = make_random_genes(self._tasks, 10)
+        self.assertTrue(is_schedule_possible(schedule, self._tasks))
+
+    def test_empty_tasks(self):
+        schedule = make_random_genes({}, 5)
+        self.assertEqual([-1, -1, -1, -1, -1], schedule,
+                         "This array should be filled with -1")
+
+    def test_schedule_with_alot_of_tasks(self):
+        tasks = self._tasks * 3
+        schedule = make_random_genes(tasks, 10)
+        self.assertTrue(is_schedule_possible(schedule, tasks))
+
 
 
 if __name__ == '__main__':

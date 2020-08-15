@@ -9,6 +9,7 @@ TODO(zhach):
 4) Implement fitness score
 5) Implement selection
 6) Implement stopping criteria
+7) Change task cotainer to a dictionary
 7) Tests
 """
 
@@ -25,6 +26,8 @@ def is_schedule_possible(schedule, tasks):
     for idx, task_cnt in cnts.items():
         if idx > len(tasks):
             return False
+        if idx < 0:
+            continue
         if task_cnt > tasks[idx].time_required:
             return False
     return True
@@ -106,7 +109,19 @@ def mutate(schedule, tasks, force_add=None):
 def make_random_genes(tasks, schedule_size):
     # for loop; get random task or -1; if we have more spaces in it, go ahead
     # and add it; keeping going until we get schedule_size
-    return [-1] * schedule_size
+    rand_schedule = []
+    # The idx here should just be from [0, num_of_tasks)
+    time_units_left = dict(get_counter_from_tasktime(tasks))
+    while len(rand_schedule) < schedule_size:
+        if np.random.random() < 0.2 or time_units_left == {}:
+            rand_schedule.append(-1)
+        else:
+            random_task = int(np.floor(np.random.random() * len(time_units_left)))
+            rand_schedule.append(random_task)
+            time_units_left[random_task] -= 1
+            if time_units_left[random_task] == 0:
+                del time_units_left[random_task]
+    return rand_schedule
 
 
 def crossover(genes_a, genes_b):
