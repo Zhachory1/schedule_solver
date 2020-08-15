@@ -1,28 +1,36 @@
 import unittest
 import numpy as np
+from google.protobuf.json_format import ParseDict
 
 from solve_schedule_ga import *
+import tasks_pb2
+
+
+def DictToTask(in_dict):
+    return_task = tasks_pb2.Task()
+    ParseDict(in_dict, return_task)
+    return return_task
 
 
 class TestIsValidSchedule(unittest.TestCase):
     def setUp(self):
         self._tasks = [
-            {
-                'priority': 0,
-                'time': 3,
-            },
-            {
-                'priority': 2,
-                'time': 3,
-            },
-            {
+            DictToTask({
                 'priority': 1,
-                'time': 1,
-            },
-            {
+                'time_required': 3,
+            }),
+            DictToTask({
+                'priority': 3,
+                'time_required': 3,
+            }),
+            DictToTask({
+                'priority': 2,
+                'time_required': 1,
+            }),
+            DictToTask({
                 'priority': 4,
-                'time': 8,
-            },
+                'time_required': 8,
+            }),
         ]
 
     def test_valid_filled_schedule(self):
@@ -54,18 +62,18 @@ class TestMutateSchedule(unittest.TestCase):
     def setUp(self):
         np.random.seed(42)
         self._tasks = [
-            {
-                'priority': 0,
-                'time': 3,
-            },
-            {
-                'priority': 2,
-                'time': 3,
-            },
-            {
+            DictToTask({
                 'priority': 1,
-                'time': 1,
-            },
+                'time_required': 3,
+            }),
+            DictToTask({
+                'priority': 3,
+                'time_required': 3,
+            }),
+            DictToTask({
+                'priority': 2,
+                'time_required': 1,
+            }),
         ]
 
     def test_empty_schedule_and_tasks(self):
@@ -91,18 +99,18 @@ class TestMakeRandomGenes(unittest.TestCase):
     def setUp(self):
         np.random.seed(42)
         self._tasks = [
-            {
-                'priority': 0,
-                'time': 3,
-            },
-            {
-                'priority': 2,
-                'time': 3,
-            },
-            {
+            DictToTask({
                 'priority': 1,
-                'time': 1,
-            },
+                'time_required': 3,
+            }),
+            DictToTask({
+                'priority': 3,
+                'time_required': 3,
+            }),
+            DictToTask({
+                'priority': 2,
+                'time_required': 1,
+            }),
         ]
 
     def test_random_genes(self):

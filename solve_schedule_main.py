@@ -5,11 +5,14 @@ TODO(zhach):
 1) Create task proto
 2) change parse_input to output a list of protos
 3) Implement main genetic algorithm code
-4) suck butts
+4) Output tasks and time units that are left
+5) suck butts
 """
 
 from absl import app
 from absl import flags
+
+import tasks_pb2
 
 import pandas as pd
 
@@ -24,14 +27,13 @@ def parse_input(file_name):
     tasks = pd.read_csv(FLAGS.input)
     # Parse the tasks into a hash
     tasks_d = {}
-    max_priority = 0.0
     for index, task in tasks.iterrows():
-        tasks_d[task['Index']] = {
-            'priority': task['Priority'],
-            'time': task['Time (30min)'],
-        }
-        max_priority = max(max_priority, float(task['Priority']))
-    return max_priority, tasks_d
+        temp_task = tasks_pb2.Task()
+        temp_task.priority = task['Priority']
+        temp_task.time_required = task['Time (15 min)']
+        temp_task.id = task['Index']
+        tasks_d[task['Index']] = temp_task
+    return tasks_d
 
 
 def main(argv):
@@ -39,7 +41,7 @@ def main(argv):
         raise app.UsageError('Too many command-line arguments.')
 
     # Parse the tasks into a hash
-    max_priority, tasks_d = parse_input(FLAGS.input)
+    tasks_d = parse_input(FLAGS.input)
 
     print("I'm working")
     return 0

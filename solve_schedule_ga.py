@@ -26,7 +26,7 @@ def is_schedule_possible(schedule, tasks):
     for idx, task_cnt in cnts.items():
         if idx > len(tasks):
             return False
-        if task_cnt > tasks[idx]['time']:
+        if task_cnt > tasks[idx].time_required:
             return False
     return True
 
@@ -36,7 +36,7 @@ def get_counter_from_tasktime(tasks):
     # the index of the task
     results = {}
     for idx, task in enumerate(tasks):
-        results[idx] = task['time']
+        results[idx] = task.time_required
     return results
 
 
