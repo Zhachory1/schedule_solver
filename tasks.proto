@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+message Task {
+    enum Priority {
+        UNDECIDED = 0;
+        CRITICAL = 1;
+        IMPORTANT = 2;
+        NORMAL = 3;
+        LOW = 4;
+    }
+    enum TimePreference {
+        NONE = 0;
+        EARLIER = 1;
+        LATER = 2;
+    }
+
+    // Useful field to hold id of a task if we have an id to use from an API or
+    // a database.
+    uint64 id = 1;
+    // Short title (<256 chars) describing the task
+    string title = 2;
+    // URL to add additional information about the task
+    string link = 5;
+    // Short description of the task
+    string description = 6;
+
+    // Priority signifies how much I value getting this task done quickly
+    Priority priority = 3;
+    // Number of time units (in 15 minute blocks) I estimate it will take to
+    // complete the task
+    int32 time_required = 4;
+    // Preference on when I want to do a task
+    TimePreference preference = 7;
+    // Due date in seconds from the Unix epoch
+    uint64 due_date = 8;
+}
