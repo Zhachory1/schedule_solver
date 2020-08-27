@@ -6,7 +6,6 @@ Solving the scheduling problem with Genetic Algorithms and Google's OrTools
 2) Complete tests for it
 3) Add test for or tools (it's freaking weird dude; no documentation at all)
 4) Add data file
-5) Add task proto
 
 ## Future work
 1) Connecting input apps
