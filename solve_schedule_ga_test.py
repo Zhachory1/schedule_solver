@@ -128,5 +128,52 @@ class TestMakeRandomGenes(unittest.TestCase):
         self.assertTrue(is_schedule_possible(schedule, tasks))
 
 
+class TestFitnessFunction(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(42)
+        self._tasks = [
+            DictToTask({
+                'priority': 1,
+                'time_required': 3,
+            }),
+            DictToTask({
+                'priority': 3,
+                'time_required': 3,
+            }),
+            DictToTask({
+                'priority': 2,
+                'time_required': 1,
+            }),
+            DictToTask({
+                'priority': 4,
+                'time_required': 5,
+            }),
+        ]
+
+    def test_empty_schedule(self):
+        schedule = [-1, -1, -1, -1]
+        self.assertEqual(fitness_impl(schedule, self._tasks),
+            [0.0, 1.0, 0.0, 0.0])
+
+    def test_filled_schedule(self):
+        schedule = [0, 0, 3, 3]
+        self.assertEqual(fitness_impl(schedule, self._tasks),
+            [0.0, 0.9330329915368074, 1.0, 0.375])
+
+    def test_low_priority(self):
+        schedule = [3, 3, 3, 3]
+        self.assertEqual(fitness_impl(schedule, self._tasks),
+            [0.0, 1.0, 1.0, 0.0])
+
+    def test_high_priority(self):
+        schedule = [0, 0, 0, 2]
+        self.assertEqual(fitness_impl(schedule, self._tasks),
+            [1.0, 0.9330329915368074, 1.0, 0.625])
+
+    def test_context_switched(self):
+        schedule = [0, 1, 2, 3]
+        self.assertEqual(fitness_impl(schedule, self._tasks),
+            [0.25, 0.8122523963562356, 1.0, 0.375])
+
 if __name__ == '__main__':
     unittest.main()

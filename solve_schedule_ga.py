@@ -15,7 +15,7 @@ TODO(zhach):
 
 from collections import Counter
 import numpy as np
-
+import tasks_pb2
 
 def is_schedule_possible(schedule, tasks):
     # Make sure of the following things:
@@ -146,13 +146,72 @@ class Citizen:
         pass
 
 
-def fitness(X):
-    # There's a few things I'm adding into this function:
-    # 1) It's better to have a task completed
-    # 2) I rather not context switch between tasks within a day
-    # 3) I rather have a full day of things
-    # 4) I prefer completed higher priorities before lower prioritys
-    pass
+def fitness(schedule, tasks, coeff=[1.0, 1.0, 1.0, 1.0]):
+    fitness = 0
+    fitness_vals = fitness_impl(schedule, tasks)
+    for idx, val in enumerate(fitness_vals):
+        fitness += coeff[idx] * val
+    return fitness
+
+def fitness_impl(schedule, tasks):
+    '''Finding the fitness of a schedule
+    There's a few things I'm adding into this function:
+    1) It's better to have a task completed
+    2) I rather not context switch between tasks within a day
+    3) I rather have a full day of things
+    4) I prefer completed higher priorities before lower priorities
+
+    The function will be an additive score where each function will return a
+    value from [0, 1]
+
+    Args:
+        X: the schedule; an array of numbers where the value corresponds to an
+            index in the tasks dictionary
+        tasks: dict hold task index and task proto for quick access to data
+    Returns:
+        A double score of how fit the schedule it
+    '''
+    final_fitness = []
+
+    # First make completed tasks value. sum(completed_tasks)/sum(tasks_done)
+    schedule_counter = Counter(schedule)
+    sum_completed = 0
+    for task in schedule_counter:
+        if task != -1 and schedule_counter[task] == tasks[task].time_required:
+            sum_completed +=1
+    final_fitness.append(float(sum_completed)/len(schedule_counter))
+
+    # Next, context switches. This can be a negative exponential function, where
+    # x [0, inf) is the number of context switches.
+    #   f(x) =  2^(-x/10)
+    context_switches = 0
+    last_task = schedule[0]
+    for slot in range(1, len(schedule)):
+        current_task = schedule[slot]
+        if current_task == -1:
+            continue
+        elif last_task != current_task:
+            context_switches += 1
+        last_task = current_task
+    final_fitness.append(pow(2, -context_switches/float(10)))
+
+    # Next, I penalize for not having a full day. So I just count empty slots
+    # in my schedule
+    final_fitness.append(1-(schedule_counter[-1]/len(schedule)))
+
+    # Finally, I add up the priotiies of my tasks, and divide by the worst case,
+    # all my tasks having low priority. Then I push that through my 1-g(x)
+    sum_priorities = 0
+    for task in schedule_counter:
+        if task == -1:
+            sum_priorities += tasks_pb2.Task.Priority.LOW
+        else:
+            sum_priorities += tasks[task].priority
+    final_fitness.append(1 - (\
+        sum_priorities/float(tasks_pb2.Task.Priority.LOW*len(schedule_counter))
+    ))
+
+    return final_fitness
 
 
 def selection(population):
