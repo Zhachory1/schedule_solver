@@ -13,7 +13,10 @@ from absl import flags
 
 import tasks_pb2
 
+import matplotlib.pyplot as plt
 import pandas as pd
+
+import solve_schedule_ga as ssg
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string('input', 'tasks.csv', 'CSV file with tasks, priority and'
@@ -25,14 +28,14 @@ flags.DEFINE_string('output', 'schedule.csv', 'CSV file with schedule with the'
 def parse_input(file_name):
     tasks = pd.read_csv(FLAGS.input)
     # Parse the tasks into a hash
-    tasks = []
+    tasks_list = []
     for index, task in tasks.iterrows():
         temp_task = tasks_pb2.Task()
         temp_task.priority = task['Priority']
-        temp_task.time_required = task['Time (15 min)']
+        temp_task.time_required = task['Time (15min)']
         temp_task.id = task['Index']
-        tasks.append(temp_task)
-    return tasks
+        tasks_list.append(temp_task)
+    return tasks_list
 
 
 def main(argv):
@@ -40,9 +43,16 @@ def main(argv):
         raise app.UsageError('Too many command-line arguments.')
 
     # Parse the tasks into a hash
-    _ = parse_input(FLAGS.input)
+    tasks = parse_input(FLAGS.input)
+    print(tasks)
 
-    print("I'm working")
+    schedule_1 = ssg.make_random_genes(tasks, 8)
+    schedule_2 = ssg.make_random_genes(tasks, 8)
+
+    plt.imshow([schedule_1, schedule_2])
+    plt.colorbar()
+    plt.show()
+
     return 0
 
 

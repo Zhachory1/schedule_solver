@@ -38,7 +38,7 @@ def get_counter_from_tasktime(tasks):
     results = {}
     for idx, task in enumerate(tasks):
         results[idx] = task.time_required
-    return results
+    return Counter(results)
 
 
 def find_random_empty_unit(schedule):
@@ -115,8 +115,7 @@ def make_random_genes(tasks, schedule_size):
         if np.random.random() < 0.2 or time_units_left == {}:
             rand_schedule.append(-1)
         else:
-            random_task = \
-                int(np.floor(np.random.random() * len(time_units_left)))
+            random_task = np.random.choice(list(time_units_left.keys()))
             rand_schedule.append(random_task)
             time_units_left[random_task] -= 1
             if time_units_left[random_task] == 0:
@@ -125,13 +124,13 @@ def make_random_genes(tasks, schedule_size):
 
 
 def crossover(genes_a, genes_b):
-    # Go through the schedule in both schedules; start with a; go through
-    # until we stop working on a task; switch to b; keep adding until we
-    # stop working on a task; go back to a; repeat until we hit the end
-    # of the schedule; if we run out of time for 1 task, just use the
-    # other schedule; if the other schedule also uses the same task, set
-    # units to -1
-    return genes_a
+    # Go through both genes. If values at the same index are the same, keep.
+    # Else, pass.
+    crossover = []
+    for idx in range(len(genes_a)):
+        if genes_b[idx] == genes_a[idx]:
+            crossover.append(genes_a[idx])
+    return crossover
 
 
 class Citizen:
