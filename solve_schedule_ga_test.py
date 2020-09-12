@@ -175,5 +175,16 @@ class TestFitnessFunction(unittest.TestCase):
         self.assertEqual(fitness_impl(schedule, self._tasks),
             [0.25, 0.8122523963562356, 1.0, 0.375])
 
+class TestCrossover(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(42)
+
+    def test_empty_schedule(self):
+        genes_a = [0, 1, -1, -1, 1, 1, 1, 0]
+        genes_b = [0, 1, -1, 2, 0, 1, 1, 0]
+        self.assertEqual(crossover(genes_a, genes_b),
+            [0, 1, -1, -1, -1, 1, 1, 0])
+
+
 if __name__ == '__main__':
     unittest.main()

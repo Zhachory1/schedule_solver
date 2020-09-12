@@ -130,6 +130,8 @@ def crossover(genes_a, genes_b):
     for idx in range(len(genes_a)):
         if genes_b[idx] == genes_a[idx]:
             crossover.append(genes_a[idx])
+        else:
+            crossover.append(-1)
     return crossover
 
 
