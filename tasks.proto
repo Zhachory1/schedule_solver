@@ -13,8 +13,9 @@ message Task {
     }
     enum TimePreference {
         NONE = 0;
-        EARLIER = 1;
-        LATER = 2;
+        ASAP = 1;
+        EARLIER = 2;
+        LATER = 3;
     }
 
     // Useful field to hold id of a task if we have an id to use from an API or

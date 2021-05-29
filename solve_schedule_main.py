@@ -49,9 +49,10 @@ def main(argv):
     schedule_1 = ssg.make_random_genes(tasks, 8)
     schedule_2 = ssg.make_random_genes(tasks, 8)
 
+    fig = plt.figure()
     plt.imshow([schedule_1, schedule_2])
     plt.colorbar()
-    plt.show()
+    fig.savefig("temp.png", dpi=fig.dpi)
 
     return 0
 

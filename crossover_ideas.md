@@ -13,5 +13,5 @@
     - Might be good. We are only keep the ones that we know both good schedule
         have
     - Bad cause we might lose a good portion of our schedule
-    _ _idea_: we might be able to change mutate rates to add tasks more often
+    - _idea_: we might be able to change mutate rates to add tasks more often
         to make up for this loss of tasks
