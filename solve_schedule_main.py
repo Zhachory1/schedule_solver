@@ -46,13 +46,25 @@ def main(argv):
     tasks = parse_input(FLAGS.input)
     print(tasks)
 
-    schedule_1 = ssg.make_random_genes(tasks, 8)
-    schedule_2 = ssg.make_random_genes(tasks, 8)
+    schedule_1 = ssg.Citizen(tasks=tasks, schedule_size=8)
+    schedule_2 = ssg.Citizen(tasks=tasks, schedule_size=8)
 
-    fig = plt.figure()
-    plt.imshow([schedule_1, schedule_2])
-    plt.colorbar()
-    fig.savefig("temp.png", dpi=fig.dpi)
+    print(schedule_1.genes)
+    print(schedule_2.genes)
+
+    print(schedule_1.fitness())
+    print(schedule_2.fitness())
+    
+    crossover = ssg.crossover(schedule_1, schedule_2)
+
+    print(crossover.genes)
+    print(crossover.fitness())
+
+    crossover.mutate()
+    print(crossover.genes)
+    print(crossover.fitness())
+
+
 
     return 0
 

@@ -25,6 +25,7 @@ py_test(
         ":tasks_py_proto",
         requirement("numpy"),
         requirement("protobuf"),
+        requirement("pandas"),
     ],
 )
 
