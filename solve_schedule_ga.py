@@ -61,6 +61,8 @@ def crossover(genes_a, genes_b):
         sums.update(itemset)
         counters.update(itemset.keys())
     new_genes_cnt = {x: int(sums[x]/counters[x]) for x in sums.keys()}
+    # Drop -1s in the dict
+    new_genes_cnt.pop(-1)
     return Citizen(genes=counter_to_schedule(new_genes_cnt, genes_a.schedule_size),
                    tasks=genes_a.tasks,
                    schedule_size=genes_a.schedule_size)
@@ -109,14 +111,14 @@ class Citizen:
         4) I prefer completed higher priorities before lower priorities
 
         The function will be an additive score where each function will return a
-        value from [0, 1]
+        value from [0, inf). The higher it is, the fitter the citizen. 
 
         Args:
             X: the schedule; an array of numbers where the value corresponds to an
                 index in the tasks dictionary
             tasks: dict hold task index and task proto for quick access to data
         Returns:
-            A double score of how fit the schedule it
+            A list of double score of how fit the schedule it
         '''
         final_fitness = []
 

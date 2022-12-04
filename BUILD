@@ -8,6 +8,16 @@ py_proto_library(
 )
 
 py_library(
+    name = "solve_interface",
+    srcs = ["solve_interface.py"],
+    deps = [
+        ":tasks_py_proto",
+        requirement("numpy"),
+    ],
+    srcs_version = "PY3",
+)
+
+py_library(
     name = "solve_schedule_ga",
     srcs = ["solve_schedule_ga.py"],
     deps = [
@@ -39,5 +49,32 @@ py_binary(
         requirement("matplotlib"),
         requirement("absl-py"),
         requirement("pandas"),
+    ]
+)
+
+filegroup(
+    name = "templates",
+    srcs = glob([
+        "templates/*.html",
+    ])
+)
+
+filegroup(
+    name = "static",
+    srcs = glob([
+        "static/**/*",
+    ])
+)
+
+py_binary(
+    name = "server",
+    srcs = ["server.py"],
+    srcs_version = "PY3",
+    deps = [
+        requirement("flask"),
+    ],
+    data = [
+        ":templates",
+        ":static",
     ]
 )

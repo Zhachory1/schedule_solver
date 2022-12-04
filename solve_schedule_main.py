@@ -19,10 +19,10 @@ import pandas as pd
 import solve_schedule_ga as ssg
 
 FLAGS = flags.FLAGS
-flags.DEFINE_string('input', 'tasks.csv', 'CSV file with tasks, priority and'
-                    ' time they take in units of 30 minutes')
-flags.DEFINE_string('output', 'schedule.csv', 'CSV file with schedule with the'
-                    ' task, the start index, and the end index.')
+flags.DEFINE_string('input', 'tasks.csv', 'CSV file with tasks, priority and '
+                    'time they take in units of 30 minutes')
+flags.DEFINE_string('output', 'schedule.csv', 'CSV file with schedule with the '
+                    'task, the start index, and the end index.')
 
 
 def parse_input(file_name):
@@ -49,23 +49,31 @@ def main(argv):
     schedule_1 = ssg.Citizen(tasks=tasks, schedule_size=8)
     schedule_2 = ssg.Citizen(tasks=tasks, schedule_size=8)
 
+    # Start populate
     print(schedule_1.genes)
     print(schedule_2.genes)
 
     print(schedule_1.fitness())
     print(schedule_2.fitness())
     
-    crossover = ssg.crossover(schedule_1, schedule_2)
+    # Get some crossover with healthiest citizens
+    crossover1 = ssg.crossover(schedule_1, schedule_2)
+    print(crossover1.genes)
+    print(crossover1.fitness())
 
-    print(crossover.genes)
-    print(crossover.fitness())
+    crossover2 = ssg.crossover(schedule_1, schedule_2)
+    print(crossover2.genes)
+    print(crossover2.fitness())
 
-    crossover.mutate()
-    print(crossover.genes)
-    print(crossover.fitness())
+    # Randomly mutate new citizens
+    crossover1.mutate()
+    print(crossover1.genes)
+    print(crossover1.fitness())
 
+    # Replace old population with new
 
-
+    # Find fittest and track some stats
+    
     return 0
 
 
