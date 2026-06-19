@@ -52,20 +52,26 @@ def counter_to_schedule(counter, schedule_size):
     return schedule
 
 def crossover(genes_a, genes_b):
-    # Average counters between genes and randomly make schedule out of it 
-    ga_cnt = Counter(genes_a.genes)
-    gb_cnt = Counter(genes_b.genes)
+    # Average counters between genes and randomly make schedule out of it.
+    return_list = not hasattr(genes_a, "genes")
+    schedule_size = genes_a.schedule_size if hasattr(genes_a, "schedule_size") else len(genes_a)
+    tasks = genes_a.tasks if hasattr(genes_a, "tasks") else []
+    left_genes = genes_a.genes if hasattr(genes_a, "genes") else genes_a
+    right_genes = genes_b.genes if hasattr(genes_b, "genes") else genes_b
+
+    ga_cnt = Counter(left_genes)
+    gb_cnt = Counter(right_genes)
     sums = Counter()
     counters = Counter()
     for itemset in [ga_cnt, gb_cnt]:
         sums.update(itemset)
         counters.update(itemset.keys())
     new_genes_cnt = {x: int(sums[x]/counters[x]) for x in sums.keys()}
-    # Drop -1s in the dict
-    new_genes_cnt.pop(-1)
-    return Citizen(genes=counter_to_schedule(new_genes_cnt, genes_a.schedule_size),
-                   tasks=genes_a.tasks,
-                   schedule_size=genes_a.schedule_size)
+    new_genes_cnt.pop(-1, None)
+    genes = counter_to_schedule(new_genes_cnt, schedule_size)
+    if return_list:
+        return genes
+    return Citizen(genes=genes, tasks=tasks, schedule_size=schedule_size)
 
 class Citizen:
     def __init__(self, genes=None, tasks=None, schedule_size=0, c_limit=-1):
@@ -225,6 +231,23 @@ class Citizen:
                 if time_units_left[random_task] == 0:
                     del time_units_left[random_task]
         self.genes = rand_schedule
+
+def mutate(schedule, tasks, force_add=None):
+    citizen = Citizen(genes=list(schedule), tasks=tasks, schedule_size=len(schedule))
+    citizen.mutate(force_add)
+    return citizen.genes
+
+
+def make_random_genes(tasks, schedule_size):
+    if not tasks:
+        return [-1] * schedule_size
+    return Citizen(tasks=tasks, schedule_size=schedule_size).genes
+
+
+def fitness_impl(schedule, tasks):
+    citizen = Citizen(genes=list(schedule), tasks=tasks, schedule_size=len(schedule))
+    return citizen._Citizen__fitness_impl(tasks)
+
 
 def selection(population):
     pass
