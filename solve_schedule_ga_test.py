@@ -1,9 +1,13 @@
 import unittest
-import numpy as np
-from google.protobuf.json_format import ParseDict
 
-from solve_schedule_ga import *
-import tasks_pb2
+try:
+    import numpy as np
+    from google.protobuf.json_format import ParseDict
+
+    from solve_schedule_ga import *
+    import tasks_pb2
+except ModuleNotFoundError as exc:
+    raise unittest.SkipTest(f"GA tests require missing dependency: {exc.name}") from exc
 
 
 def DictToTask(in_dict):

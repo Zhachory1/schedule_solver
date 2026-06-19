@@ -4,8 +4,7 @@ Main function to run the schedule solver with genetic algorithms
 TODO(zhach):
 1) change parse_input to output a list of protos
 2) Implement main genetic algorithm code
-3) Output tasks and time units that are left
-4) suck butts
+3) Improve population selection/stopping criteria
 """
 
 from absl import app
@@ -17,6 +16,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 import solve_schedule_ga as ssg
+from schedule_output import write_schedule_csv
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string('input', 'tasks.csv', 'CSV file with tasks, priority and '
@@ -36,6 +36,10 @@ def parse_input(file_name):
         temp_task.id = task['Index']
         tasks_list.append(temp_task)
     return tasks_list
+
+
+def genes_to_task_ids(genes, tasks):
+    return [tasks[gene].id if gene != -1 else -1 for gene in genes]
 
 
 def main(argv):
@@ -73,7 +77,13 @@ def main(argv):
     # Replace old population with new
 
     # Find fittest and track some stats
-    
+    best_schedule = max(
+        (schedule_1, schedule_2, crossover1, crossover2),
+        key=lambda citizen: citizen.fitness(),
+    )
+    write_schedule_csv(FLAGS.output, genes_to_task_ids(best_schedule.genes, tasks))
+    print(f"Wrote schedule to {FLAGS.output}")
+
     return 0
 
 
