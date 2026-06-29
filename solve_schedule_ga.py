@@ -249,9 +249,39 @@ def fitness_impl(schedule, tasks):
     return citizen._Citizen__fitness_impl(tasks)
 
 
-def selection(population):
-    pass
+def selection(population, keep_count=None):
+    if not population:
+        return []
+    keep_count = keep_count or max(1, len(population) // 2)
+    return sorted(population, key=lambda citizen: citizen.fitness(), reverse=True)[:keep_count]
 
 
-def stopping_criteria():
-    pass
+def stopping_criteria(generation, max_generations, best_fitness=None, target_fitness=None):
+    if target_fitness is not None and best_fitness is not None and best_fitness >= target_fitness:
+        return True
+    return generation >= max_generations
+
+
+def solve_schedule(tasks, schedule_size=24, population_size=20, generations=50, mutation_rate=0.2):
+    if not tasks:
+        return [-1] * schedule_size
+
+    population = [Citizen(tasks=tasks, schedule_size=schedule_size) for _ in range(population_size)]
+    generation = 0
+    while True:
+        parents = selection(population, max(2, population_size // 2))
+        best_fitness = parents[0].fitness()
+        if stopping_criteria(generation, generations, best_fitness):
+            return parents[0].genes
+
+        next_population = parents[:]
+        while len(next_population) < population_size:
+            parent_a = parents[np.random.randint(len(parents))]
+            parent_b = parents[np.random.randint(len(parents))]
+            child = crossover(parent_a, parent_b)
+            if np.random.random() < mutation_rate:
+                child.mutate()
+            next_population.append(child)
+
+        population = next_population
+        generation += 1

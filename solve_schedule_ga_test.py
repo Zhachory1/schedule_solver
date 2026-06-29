@@ -179,6 +179,40 @@ class TestFitnessFunction(unittest.TestCase):
         self.assertEqual(fitness_impl(schedule, self._tasks),
             [0.25, 0.8122523963562356, 1.0, 0.375])
 
+class TestSelection(unittest.TestCase):
+    def setUp(self):
+        self._tasks = [
+            DictToTask({'priority': 1, 'time_required': 2}),
+            DictToTask({'priority': 3, 'time_required': 1}),
+        ]
+
+    def test_selection_keeps_fittest(self):
+        weak = Citizen(genes=[-1, -1], tasks=self._tasks, schedule_size=2)
+        strong = Citizen(genes=[0, 0], tasks=self._tasks, schedule_size=2)
+
+        self.assertEqual(selection([weak, strong], 1), [strong])
+
+    def test_stopping_criteria(self):
+        self.assertFalse(stopping_criteria(4, 5))
+        self.assertTrue(stopping_criteria(5, 5))
+        self.assertTrue(stopping_criteria(0, 5, best_fitness=1.0, target_fitness=1.0))
+
+
+class TestSolveSchedule(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(42)
+        self._tasks = [
+            DictToTask({'priority': 1, 'time_required': 2}),
+            DictToTask({'priority': 3, 'time_required': 1}),
+        ]
+
+    def test_solve_schedule_returns_valid_genes(self):
+        schedule = solve_schedule(self._tasks, schedule_size=4, population_size=4, generations=2)
+
+        self.assertEqual(len(schedule), 4)
+        self.assertTrue(is_schedule_possible(schedule, self._tasks))
+
+
 class TestCrossover(unittest.TestCase):
     def setUp(self):
         np.random.seed(42)
