@@ -1,19 +1,58 @@
 <html>
+  <head>
     <title>My Schedule Solver</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/@bpmn-io/form-js@0.7.2/dist/assets/form-js.css">
-    <style>
-      #inputs {
-        max-width: 800px;
-      }
-    </style>
-    <script src="https://unpkg.com/@bpmn-io/form-js@0.7.2/dist/form-viewer.umd.js"></script>
-    <script src="/static/index.js"></script>
-    <body>
+  </head>
+  <body>
     <h1>My Schedule Solver</h1>
-    <div>
-        <p>Input your tasks</p>
-        <div id="inputs"></div>
-    </div>
-    </body>
+
+    <h2>Before tasks</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Task</th>
+        <th>Priority</th>
+        <th>Time (15min)</th>
+      </tr>
+      {% for task in tasks %}
+      <tr>
+        <td>{{ task["Index"] }}</td>
+        <td>{{ task["Task"] }}</td>
+        <td>{{ task["Priority"] }}</td>
+        <td>{{ task["Time (15min)"] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h2>Preview calendar</h2>
+    <table>
+      <tr>
+        <th>Task</th>
+        <th>Start</th>
+        <th>End</th>
+      </tr>
+      {% for row in schedule_rows %}
+      <tr>
+        <td>{{ row.task }}</td>
+        <td>{{ row.start_index }}</td>
+        <td>{{ row.end_index }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h2>After tasks</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Task</th>
+        <th>Remaining (15min)</th>
+      </tr>
+      {% for task in remaining_tasks %}
+      <tr>
+        <td>{{ task["Index"] }}</td>
+        <td>{{ task["Task"] }}</td>
+        <td>{{ task["Remaining (15min)"] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
 </html>
