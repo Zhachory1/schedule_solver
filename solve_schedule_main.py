@@ -46,42 +46,9 @@ def main(argv):
     if len(argv) > 2:
         raise app.UsageError('Too many command-line arguments.')
 
-    # Parse the tasks into a hash
     tasks = parse_input(FLAGS.input)
-    print(tasks)
-
-    schedule_1 = ssg.Citizen(tasks=tasks, schedule_size=8)
-    schedule_2 = ssg.Citizen(tasks=tasks, schedule_size=8)
-
-    # Start populate
-    print(schedule_1.genes)
-    print(schedule_2.genes)
-
-    print(schedule_1.fitness())
-    print(schedule_2.fitness())
-    
-    # Get some crossover with healthiest citizens
-    crossover1 = ssg.crossover(schedule_1, schedule_2)
-    print(crossover1.genes)
-    print(crossover1.fitness())
-
-    crossover2 = ssg.crossover(schedule_1, schedule_2)
-    print(crossover2.genes)
-    print(crossover2.fitness())
-
-    # Randomly mutate new citizens
-    crossover1.mutate()
-    print(crossover1.genes)
-    print(crossover1.fitness())
-
-    # Replace old population with new
-
-    # Find fittest and track some stats
-    best_schedule = max(
-        (schedule_1, schedule_2, crossover1, crossover2),
-        key=lambda citizen: citizen.fitness(),
-    )
-    write_schedule_csv(FLAGS.output, genes_to_task_ids(best_schedule.genes, tasks))
+    genes = ssg.solve_schedule(tasks, schedule_size=8)
+    write_schedule_csv(FLAGS.output, genes_to_task_ids(genes, tasks))
     print(f"Wrote schedule to {FLAGS.output}")
 
     return 0
