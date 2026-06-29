@@ -1,13 +1,14 @@
 Last Updated: 2022/05/31
 
 # schedule_solver
-Solving the scheduling problem with Genetic Algorithms and Google's OrTools
 
-## TODO(zhach):
-1) Complete GA implementation
-2) Complete tests for it
-3) Add test for or tools (it's freaking weird dude; no documentation at all)
-4) Add data file
+MVP: CSV tasks in, OR-Tools/CP-SAT schedule out. Follow-up solver experiments: GA (#1), greedy (#6), linear programming (#5).
+
+## Run MVP solver
+
+```bash
+python3 solve_schedule_ortools.py --input=tasks.csv --output=schedule.csv
+```
 
 ## Local non-Bazel setup
 
@@ -35,5 +36,4 @@ protoc --python_out=. tasks.proto
 2) Connect output apps
     a) Like connect to my calendar to make these time units for me
     b) Also try to track scheduled stuff in a db
-3) Make a hueristic greedy scheduler
-4) Make it run automatically
+3) Make it run automatically
