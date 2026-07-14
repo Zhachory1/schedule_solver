@@ -18,6 +18,20 @@ py_library(
 )
 
 py_library(
+    name = "data_interfaces",
+    srcs = ["data_interfaces.py"],
+    srcs_version = "PY3",
+)
+
+py_test(
+    name = "test_data_interfaces",
+    srcs = ["test_data_interfaces.py"],
+    deps = [
+        ":data_interfaces",
+    ],
+)
+
+py_library(
     name = "solve_schedule_ga",
     srcs = ["solve_schedule_ga.py"],
     deps = [

@@ -30,10 +30,11 @@ protoc --python_out=. tasks.proto
 
 `tasks_pb2.py` is generated code and can be regenerated whenever `tasks.proto` changes.
 
+## Data interfaces
+
+`data_interfaces.py` provides SQLite persistence plus Kanboard, Google Tasks, and Google Calendar adapters. Google and Kanboard adapters expect caller-provided authenticated clients.
+
 ## Future work
-1) Connecting input apps
-    a) Like connecting to the tasks api or a kanban server to get tasks
-2) Connect output apps
-    a) Like connect to my calendar to make these time units for me
-    b) Also try to track scheduled stuff in a db
+1) Wire data interfaces into solver CLI flows
+2) Add credential setup docs for Kanboard and Google Workspace
 3) Make it run automatically
