@@ -29,3 +29,7 @@ def solve_priority_first(tasks_d, num_time_units=16):
 
     schedule.extend([-1] * (num_time_units - len(schedule)))
     return schedule
+
+
+def solve_greedy(tasks_d, num_time_units=16):
+    return solve_priority_first(tasks_d, num_time_units)

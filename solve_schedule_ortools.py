@@ -17,7 +17,7 @@ from schedule_output import write_schedule_csv
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string('input', 'tasks.csv', 'CSV file with tasks, priority and'
-                    ' time they take in units of 30 minutes')
+                    ' time they take in 15-minute blocks')
 flags.DEFINE_string('output', 'schedule.csv', 'CSV file with schedule with the'
                     ' task, the start index, and the end index.')
 
@@ -29,7 +29,7 @@ def parse_input(file_name):
     for index, task in tasks.iterrows():
         tasks_d[task['Index']] = {
             'priority': task['Priority'],
-            'time': task['Time (30min)'],
+            'time': task['Time (15min)'],
         }
         max_priority = max(max_priority, float(task['Priority']))
     return max_priority, tasks_d
