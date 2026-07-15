@@ -1,4 +1,19 @@
-def solve_greedy(tasks_d, num_time_units=16):
+import random
+
+
+def solve_random(tasks_d, num_time_units=16, seed=None):
+    task_slots = []
+    for task_id, task in tasks_d.items():
+        task_slots.extend([task_id] * task["time"])
+
+    rng = random.Random(seed)
+    rng.shuffle(task_slots)
+    schedule = task_slots[:num_time_units]
+    schedule.extend([-1] * (num_time_units - len(schedule)))
+    return schedule
+
+
+def solve_priority_first(tasks_d, num_time_units=16):
     schedule = []
     sorted_tasks = sorted(
         tasks_d.items(),
@@ -14,3 +29,7 @@ def solve_greedy(tasks_d, num_time_units=16):
 
     schedule.extend([-1] * (num_time_units - len(schedule)))
     return schedule
+
+
+def solve_greedy(tasks_d, num_time_units=16):
+    return solve_priority_first(tasks_d, num_time_units)
